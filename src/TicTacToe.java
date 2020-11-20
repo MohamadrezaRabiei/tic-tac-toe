@@ -1,122 +1,160 @@
 import java.util.*;
 
 public class TicTacToe {
-    static Scanner input = new Scanner(System.in);
+    //Fields
+    static Scanner console = new Scanner(System.in);
 
-    static ArrayList<Integer> playerPosition = new ArrayList<>();
-    static ArrayList<Integer> cpuPosition = new ArrayList<>();
+    //Current Player
+    final static int CPU_TURN = 0;
+    final static int PLAYER_TURN = 1;
 
-    public static void main(String[] args) {
+    //Player winning situation
+    static ArrayList<Integer> playerPos = new ArrayList<>();
+    static ArrayList<Integer> cpuPos = new ArrayList<>();
 
-        char[][] gameBoard = {{' ', '|', ' ', '|', ' '},
+
+    //Players
+    Random random;
+    int playerX, playerY;
+    
+    //Constructor
+    public TicTacToe() {
+
+        char[][] board = {{' ', '|', ' ', '|', ' '},
                 {'-', '+', '-', '+', '-'},
                 {' ', '|', ' ', '|', ' '},
                 {'-', '+', '-', '+', '-'},
                 {' ', '|', ' ', '|', ' '}};
-
-        printGameBoard(gameBoard);
-
-
+        printGameBoard(board);
         while (true) {
-            System.out.print("Enter your placement: ");
-            int playerPos = input.nextInt();
-            while (playerPosition.contains(playerPos) || cpuPosition.contains(playerPos)) {
-                System.out.println("Place is taken already!");
-                playerPos = input.nextInt();
-            }
-
-            placePiece(gameBoard, playerPos, "player");
-
-            String result = checkWinner();
-            if (result.length() > 0) {
-                System.out.println(result);
-                break;
-            }
-
-            Random rand = new Random();
-            int cpuPos = rand.nextInt(9) + 1;
-            while (playerPosition.contains(cpuPos) || cpuPosition.contains(cpuPos)) {
-                cpuPos = rand.nextInt(9) + 1;
-            }
-            placePiece(gameBoard, cpuPos, "cpu");
-
-            printGameBoard(gameBoard);
-
-            result = checkWinner();
-            if (result.length() > 0) {
-                System.out.println(result);
-                break;
-            }
-
-            System.out.println(checkWinner());
+            gamePlaying(PLAYER_TURN, board);
+            gamePlaying(CPU_TURN, board);
+            checkWinner();
         }
 
     }
 
-    public static void printGameBoard(char[][] gameBoard) {
-        for (char[] row : gameBoard) {
-            for (char c : row) {
-                System.out.print(c);
+    //Print the game board
+    public void printGameBoard(char[][] board) {
+        for (char[] b : board) {
+            System.out.println(b);
+        }
+        System.out.println("--------");
+    }
+
+    //Playing
+    public void gamePlaying(int turn, char[][] board) {
+
+        if (turn == PLAYER_TURN) {
+            System.out.print("Enter a place to set: ");
+            playerX = console.nextInt();
+            if (playerPos.contains(playerX) || cpuPos.contains(playerY)) {
+                System.out.print("Place is already taken, try another: ");
+                playerX = console.nextInt();
             }
-            System.out.println();
+            switch (playerX) {
+                case 1:
+                    board[0][0] = 'X';
+                    break;
+
+                case 2:
+                    board[0][2] = 'X';
+                    break;
+
+                case 3:
+                    board[0][4] = 'X';
+                    break;
+
+                case 4:
+                    board[2][0] = 'X';
+                    break;
+
+                case 5:
+                    board[2][2] = 'X';
+                    break;
+
+                case 6:
+                    board[2][4] = 'X';
+                    break;
+
+                case 7:
+                    board[4][0] = 'X';
+                    break;
+
+                case 8:
+                    board[4][2] = 'X';
+                    break;
+
+                case 9:
+                    board[4][4] = 'X';
+                    break;
+
+                default:
+                    System.out.print("Enter right number [1 - 9]:");
+                    playerX = console.nextInt();
+                    break;
+            }
+            playerPos.add(playerX);
+            printGameBoard(board);
+
+
+
+        } else if (turn == CPU_TURN) {
+            random = new Random();
+            playerY = random.nextInt(9) + 1;
+            if (playerPos.contains(playerY) || cpuPos.contains(playerY) || (playerPos.contains(playerX) || cpuPos.contains(playerX))) {
+                playerY = random.nextInt(9) + 1;
+            }
+            switch (playerY) {
+                case 1:
+                    board[0][0] = 'O';
+                    break;
+
+                case 2:
+                    board[0][2] = 'O';
+                    break;
+
+                case 3:
+                    board[0][4] = 'O';
+                    break;
+
+                case 4:
+                    board[2][0] = 'O';
+                    break;
+
+                case 5:
+                    board[2][2] = 'O';
+                    break;
+
+                case 6:
+                    board[2][4] = 'O';
+                    break;
+
+                case 7:
+                    board[4][0] = 'O';
+                    break;
+
+                case 8:
+                    board[4][2] = 'O';
+                    break;
+
+                case 9:
+                    board[4][4] = 'O';
+                    break;
+
+                default:
+                    break;
+            }
+            cpuPos.add(playerY);
+            printGameBoard(board);
+
         }
+
+
     }
 
-    public static void placePiece(char[][] gameBoard, int position, String player) {
-
-        char symbol = ' ';
-        if (player.equals("player")) {
-            symbol = 'X';
-            playerPosition.add(position);
-        } else if (player.equals("cpu")) {
-            symbol = 'O';
-            cpuPosition.add(position);
-        }
-
-        switch (position) {
-            case 1:
-                gameBoard[0][0] = symbol;
-                break;
-
-            case 2:
-                gameBoard[0][2] = symbol;
-                break;
-
-            case 3:
-                gameBoard[0][4] = symbol;
-                break;
-
-            case 4:
-                gameBoard[2][0] = symbol;
-                break;
-
-            case 5:
-                gameBoard[2][2] = symbol;
-                break;
-
-            case 6:
-                gameBoard[2][4] = symbol;
-                break;
-
-            case 7:
-                gameBoard[4][0] = symbol;
-                break;
-
-            case 8:
-                gameBoard[4][2] = symbol;
-                break;
-
-            case 9:
-                gameBoard[4][4] = symbol;
-                break;
-
-
-            default:
-                break;
-        }
-    }
-
-    public static String checkWinner() {
+    //Check which player is winner of game
+    public void checkWinner() {
         List topRow = Arrays.asList(1, 2, 3);
         List midRow = Arrays.asList(4, 5, 6);
         List botRow = Arrays.asList(7, 8, 9);
@@ -132,24 +170,33 @@ public class TicTacToe {
         winning.add(topRow);
         winning.add(midRow);
         winning.add(botRow);
-
+        
         winning.add(leftCol);
         winning.add(midCol);
         winning.add(rightCol);
-
+        
         winning.add(cross1);
         winning.add(cross2);
 
         for (List l : winning) {
-            if (playerPosition.containsAll(l)) {
-               return "YOU WON!";
-            } else if (cpuPosition.containsAll(l)) {
-                return "YOU LOSE!";
-            } else if (playerPosition.size() + cpuPosition.size() == 9-1) {
-                return "DRAW";
+            if (playerPos.containsAll(l)) {
+                System.out.println("You Won!");
+                System.exit(0);
+            } else if (cpuPos.containsAll(l)) {
+                System.out.println("You Lose!");
+                System.exit(0);
+            } else if (playerPos.size() + cpuPos.size() == 9) {
+                System.out.println("Draw!");
             }
         }
 
-        return "";
     }
+
+    
+    //Main methid
+    public static void main(String[] args) {
+        new TicTacToe();
+    }
+
+
 }
