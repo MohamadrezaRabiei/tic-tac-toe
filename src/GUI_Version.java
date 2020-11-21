@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GUI_Version implements ActionListener {
-    private static JFrame mainFrame = new JFrame("Tic-Tac-Toe");
+    private static final JFrame mainFrame = new JFrame("Tic-Tac-Toe");
 
     private String winner = "";
     private String player = "X";
@@ -23,11 +23,6 @@ public class GUI_Version implements ActionListener {
 
     JLabel lblStatus = new JLabel();
     JButton[] buttons;
-
-
-    static int fontSize = 70;
-    private static Font font = new Font("arial", Font.BOLD, fontSize);
-
 
     public void btnCellAction() {
 
@@ -102,12 +97,7 @@ public class GUI_Version implements ActionListener {
 
         lblStatus.setBounds(260, 370, 60, 23);
 
-        btnReset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                reset();
-            }
-        });
+        btnReset.addActionListener(e -> reset());
 
         btnCellAction();
         updateStatus();
@@ -146,12 +136,7 @@ public class GUI_Version implements ActionListener {
             btn.setText("");
         }
 
-        btnReset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                reset();
-            }
-        });
+        btnReset.addActionListener(e -> reset());
 
         updateStatus();
     }
@@ -231,5 +216,3 @@ public class GUI_Version implements ActionListener {
     }
 
 }
-
-
